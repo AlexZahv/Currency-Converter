@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Money exchange system</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.min.js"></script>
+    <style>
+        .header, .footer {
+            text-align: center;
+            margin: 20px 5% 0 5%;
+            padding: 15px;
+            font-size: 30px;
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color: #f1f1ef;
+        }
+
+        .footer {
+            margin-bottom: 5px;
+            padding: 5px;
+            font-size: 15px;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .content-column {
+            text-align: center;
+            padding: 20px 10px 20px 10px;
+        }
+
+        .content-row {
+
+        }
+
+        .main-container {
+            margin-top: 30px;
+            background-color: #f1f1ef;
+            padding-top: 20px;
+            padding-bottom: 20px;
+
+        }
+    </style>
+    <script>
+        var app = angular.module("myApp", []);
+
+        app.controller("myCtrl", function ($scope,$http) {
+           $scope.fillCurrencies=function(){
+               $http({
+                   method: 'GET',
+                   url: '/currency'
+
+               }).then(function successCallback(response) {
+                   $scope.currencies=response.data;
+               }, function errorCallback(response) {
+                   console.log("error");
+               });
+           }
+            $scope.fillCurrencies();
+
+
+
+
+        });
+    </script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<div class="row">
+    <div class="col-cs-12 header">
+        Easy money convertation service
+    </div>
+</div>
+<div class="container main-container">
+    <div class="row content-row">
+        <h3 style="text-align: center">Transfer from {{inputCurrency.caption}} ({{inputCurrency.country}}) to
+            {{outputCurrency.caption}} ({{outputCurrency.country}})</h3>
+    </div>
+    <div class="row content-row">
+        <div class="col-xs-5 content-column">
+            <label for="usr">Fill input value :</label>
+            <input type="number" class="form-control" id="usr" ng-model="inValue" />
+            <label for="sel1">Select input currency:</label>
+            <select ng-model="inputCurrency" class="form-control"
+                    ng-options="currency as currency.label for currency in currencies">
+            </select>
+        </div>
+        <div class="col-xs-2" style="text-align: center">
+
+        </div>
+        <div class="col-xs-5 content-column">
+
+            <label for="output-money">Output value :</label>
+            <textarea class="form-control" rows="1" id="output-money" readonly="true"
+                      style="resize: none">{{inValue*(inputCurrency.value/outputCurrency.value)}}</textarea>
+
+            <label for="output-money-type">Select output currency:</label>
+            <select ng-model="outputCurrency" class="form-control"
+                    ng-options="currency as currency.label for currency in currencies">
+            </select>
+        </div>
+
+    </div>
+</div>
+<div class="navbar-fixed-bottom row-fluid footer">Footer</div>
+
+</body>
+</html>
